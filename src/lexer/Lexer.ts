@@ -22,6 +22,7 @@ export class Lexer {
     this.char = this.buffer[this.index];
   }
 
+  // TODO: Update scan
   scan() {
     if (this.char === undefined) {
       return this.symbolTable.getOrAddEntry('eof', Tag.EOF);

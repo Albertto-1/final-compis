@@ -16,6 +16,7 @@ export class LRParser {
 
     constructor(fileName: string) {
         this.lexer.openFile(fileName);
+        // TODO: Update tables files
         this.loadActions();
         this.loadGotos();
         this.loadGrammar();
