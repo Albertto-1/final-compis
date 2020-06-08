@@ -1,0 +1,45 @@
+export class Tag {
+  static PROGRAM = 0;
+  static BEGIN = 1;
+  static END = 2;
+  static WRITELN = 3;
+  static READLN = 4;
+  static VAR = 5;
+  static CONST = 6;
+  static TRUE = 7;
+  static FALSE = 8;
+  static IF = 9;
+  static ELSE = 10;
+  static ELSEIF = 11;
+  static THEN = 12;
+  static REPEAT = 13;
+  static UNTIL = 14;
+  static PROCEDURE = 15;
+  static FUNCTION = 16;
+  static ASIGN = 17;
+  static EQ = 18;
+  static LE = 19;
+  static GE = 20;
+  static LT = 21;
+  static GT = 22;
+  static OR = 23;
+  static AND = 24;
+  static LP = 25;
+  static RP = 26;
+  static TYPE = 27;
+  static OFTYPE = 28;
+  static SEMICOLON = 29;
+  static COMA = 30;
+  static POINT = 31;
+
+  static ERROR = 32;
+  static STR = 33;
+  static NUM = 34;
+  static ID = 35;
+  static EOF = 36;
+
+  static PLUS = 37;
+  static MINUS = 38;
+  static PRODUCT = 39;
+  static DIVISION = 40;
+}
