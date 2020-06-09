@@ -14,14 +14,19 @@ var Entry = (function () {
             case Tag_1.Tag.ERROR:
                 str = 'Error';
                 break;
-            case Tag_1.Tag.STR:
-                str = 'String';
-                break;
             case Tag_1.Tag.NUM:
                 str = 'Number';
                 break;
+            case Tag_1.Tag.PRINT:
+                str = 'Print';
+                extra = '\t';
+                break;
             case Tag_1.Tag.ID:
                 str = 'ID';
+                extra = '\t';
+                break;
+            case Tag_1.Tag.IF:
+                str = 'IF';
                 extra = '\t';
                 break;
             case Tag_1.Tag.EOF:
@@ -30,36 +35,14 @@ var Entry = (function () {
             case Tag_1.Tag.ASIGN:
                 str = 'Asigned to';
                 break;
-            case Tag_1.Tag.EQ:
-                str = 'is equal';
-                break;
-            case Tag_1.Tag.LE:
-                str = 'is lower or equal';
-                break;
-            case Tag_1.Tag.GE:
-                str = 'is greater or equal';
-                break;
             case Tag_1.Tag.LT:
                 str = 'is lower than';
-                break;
-            case Tag_1.Tag.GT:
-                str = 'is greater than';
                 break;
             case Tag_1.Tag.LP:
                 str = 'Left (';
                 break;
             case Tag_1.Tag.RP:
                 str = 'Right (';
-                break;
-            case Tag_1.Tag.OFTYPE:
-                str = 'Of type';
-                break;
-            case Tag_1.Tag.SEMICOLON:
-                str = 'Semicolon';
-                break;
-            case Tag_1.Tag.COMA:
-                str = 'Coma';
-                extra = '\t';
                 break;
             case Tag_1.Tag.POINT:
                 str = 'Point';
@@ -79,18 +62,17 @@ var Entry = (function () {
             case Tag_1.Tag.DIVISION:
                 str = 'Division';
                 break;
+            case Tag_1.Tag.THEN:
+                str = 'Then';
+                extra = '\t';
+                break;
             case Tag_1.Tag.TYPE:
                 str = 'Type';
                 extra = '\t';
                 break;
-            case Tag_1.Tag.AND:
-            case Tag_1.Tag.OR:
             case Tag_1.Tag.END:
             case Tag_1.Tag.TRUE:
             case Tag_1.Tag.FALSE:
-            case Tag_1.Tag.VAR:
-            case Tag_1.Tag.BEGIN:
-            case Tag_1.Tag.UNTIL:
                 extra = '\t';
             default:
                 str = this.value;

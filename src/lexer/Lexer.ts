@@ -22,7 +22,6 @@ export class Lexer {
     this.char = this.buffer[this.index];
   }
 
-  // TODO: Update scan
   scan() {
     if (this.char === undefined) {
       return this.symbolTable.getOrAddEntry('eof', Tag.EOF);
@@ -30,7 +29,8 @@ export class Lexer {
     while(
       this.char === ' ' || 
       this.char === '\t' || 
-      this.char === '\n'
+      this.char === '\n' ||
+      +this.char === 0
     ){
       if (
         this.char === '\n') {
@@ -38,22 +38,18 @@ export class Lexer {
       }
       this.next();
     }
-    if (!isNaN(+this.char)) {
+    if (this.isNumber(this.char)) {
       return this.analyzeNumber();
     } else if (this.isLetter(this.char)) {
       return this.analyzeString();
     }
     switch (this.char) {
       case '<':
-        return this.analyzeLower();
-      case '>':
-        return this.analyzeGreater();
-      case ':':
-        return this.analyzePoits();
+        this.next();
+        return this.symbolTable.getOrAddEntry('<');
+      case '#':
+        return this.analyzeBool();
       case '=':
-      case ';':
-      case ',':
-      case '.':
       case '(':
       case ')':
       case '+':
@@ -61,8 +57,6 @@ export class Lexer {
       case '*':
       case '/':
         return this.analyzeSimbols();
-      case "'":
-        return this.analyzePhrase();
     }
     this.next();
     if (this.char === undefined) {
@@ -76,42 +70,18 @@ export class Lexer {
     this.next();
     return entry;
   }
-  private analyzeLower() {
-    this.next();
-    if (this.char === '=') {
-      this.next();
-      return this.symbolTable.getOrAddEntry('<=');
-    }
-    return this.symbolTable.getOrAddEntry('<');
-  }
 
-  private analyzeGreater() {
+  private analyzeBool() {
     this.next();
-    if (this.char === '=') {
+    if (this.char === 't') {
       this.next();
-      return this.symbolTable.getOrAddEntry('>=');
+      return this.symbolTable.getOrAddEntry('#t');
     }
-    return this.symbolTable.getOrAddEntry('>');
-  }
-
-  private analyzePoits() {
-    this.next();
-    if (this.char === '=') { 
+    if (this.char === 'f') {
       this.next();
-      return this.symbolTable.getOrAddEntry(':=');
+      return this.symbolTable.getOrAddEntry('#f');
     }
-    return this.symbolTable.getOrAddEntry(':');
-  }
-
-  private analyzePhrase() {
-    let str = '';
-    do {
-      str = str + this.char;
-      this.next();
-    } while(this.char !== "'");
-    str = str + this.char;
-    this.next();
-    return this.symbolTable.getOrAddEntry(str, Tag.STR, str);
+    return this.symbolTable.getOrAddEntry('error', Tag.ERROR, 'Error: '+this.line);
   }
 
   private analyzeString() {
@@ -121,23 +91,9 @@ export class Lexer {
       this.next();
     } while(this.isAlphanumericOr_(this.char));
     if (this.symbolTable.isInTable(str)) {
-      if (str.toLowerCase() === 'else') {
-        return this.analyzeElse();
-      }
       return this.symbolTable.getOrAddEntry(str);
     }
     return this.symbolTable.getOrAddEntry(str, Tag.ID);
-  }
-
-  private analyzeElse() {
-    let index = this.index;
-    let line = this.line;
-    if (this.scan().tag === Tag.IF) {
-      return this.symbolTable.getOrAddEntry('else if');
-    }
-    this.index = index;
-    this.line = line;
-    return this.symbolTable.getOrAddEntry('else');
   }
 
   private analyzeNumber() {
@@ -151,7 +107,7 @@ export class Lexer {
     return this.symbolTable.getOrAddEntry(num, Tag.NUM, +num);
   }
 
-  private isLetter(str: string){
+  private isLetter(str: string) {
     if (str === undefined) return false;
     const letter = /^[a-zA-Z]+$/;
     if (str.match(letter)){
@@ -161,10 +117,20 @@ export class Lexer {
     }
   }
 
-  private isAlphanumericOr_(str: string){
+  private isAlphanumericOr_(str: string) {
     if (str === undefined) return false;
     const letterNumber = /^[0-9a-zA-Z_]+$/;
     if (str.match(letterNumber)){
+      return true;
+    } else {
+      return false; 
+    }
+  }
+
+  private isNumber(str: string) {
+    if (str === undefined) return false;
+    const letter = /^[0-9]+$/;
+    if (str.match(letter)){
       return true;
     } else {
       return false; 

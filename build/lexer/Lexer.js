@@ -24,13 +24,14 @@ var Lexer = (function () {
         }
         while (this.char === ' ' ||
             this.char === '\t' ||
-            this.char === '\n') {
+            this.char === '\n' ||
+            +this.char === 0) {
             if (this.char === '\n') {
                 this.line++;
             }
             this.next();
         }
-        if (!isNaN(+this.char)) {
+        if (this.isNumber(this.char)) {
             return this.analyzeNumber();
         }
         else if (this.isLetter(this.char)) {
@@ -38,15 +39,11 @@ var Lexer = (function () {
         }
         switch (this.char) {
             case '<':
-                return this.analyzeLower();
-            case '>':
-                return this.analyzeGreater();
-            case ':':
-                return this.analyzePoits();
+                this.next();
+                return this.symbolTable.getOrAddEntry('<');
+            case '#':
+                return this.analyzeBool();
             case '=':
-            case ';':
-            case ',':
-            case '.':
             case '(':
             case ')':
             case '+':
@@ -54,8 +51,6 @@ var Lexer = (function () {
             case '*':
             case '/':
                 return this.analyzeSimbols();
-            case "'":
-                return this.analyzePhrase();
         }
         this.next();
         if (this.char === undefined) {
@@ -68,39 +63,17 @@ var Lexer = (function () {
         this.next();
         return entry;
     };
-    Lexer.prototype.analyzeLower = function () {
+    Lexer.prototype.analyzeBool = function () {
         this.next();
-        if (this.char === '=') {
+        if (this.char === 't') {
             this.next();
-            return this.symbolTable.getOrAddEntry('<=');
+            return this.symbolTable.getOrAddEntry('#t');
         }
-        return this.symbolTable.getOrAddEntry('<');
-    };
-    Lexer.prototype.analyzeGreater = function () {
-        this.next();
-        if (this.char === '=') {
+        if (this.char === 'f') {
             this.next();
-            return this.symbolTable.getOrAddEntry('>=');
+            return this.symbolTable.getOrAddEntry('#f');
         }
-        return this.symbolTable.getOrAddEntry('>');
-    };
-    Lexer.prototype.analyzePoits = function () {
-        this.next();
-        if (this.char === '=') {
-            this.next();
-            return this.symbolTable.getOrAddEntry(':=');
-        }
-        return this.symbolTable.getOrAddEntry(':');
-    };
-    Lexer.prototype.analyzePhrase = function () {
-        var str = '';
-        do {
-            str = str + this.char;
-            this.next();
-        } while (this.char !== "'");
-        str = str + this.char;
-        this.next();
-        return this.symbolTable.getOrAddEntry(str, Tag_1.Tag.STR, str);
+        return this.symbolTable.getOrAddEntry('error', Tag_1.Tag.ERROR, 'Error: ' + this.line);
     };
     Lexer.prototype.analyzeString = function () {
         var str = '';
@@ -109,22 +82,9 @@ var Lexer = (function () {
             this.next();
         } while (this.isAlphanumericOr_(this.char));
         if (this.symbolTable.isInTable(str)) {
-            if (str.toLowerCase() === 'else') {
-                return this.analyzeElse();
-            }
             return this.symbolTable.getOrAddEntry(str);
         }
         return this.symbolTable.getOrAddEntry(str, Tag_1.Tag.ID);
-    };
-    Lexer.prototype.analyzeElse = function () {
-        var index = this.index;
-        var line = this.line;
-        if (this.scan().tag === Tag_1.Tag.IF) {
-            return this.symbolTable.getOrAddEntry('else if');
-        }
-        this.index = index;
-        this.line = line;
-        return this.symbolTable.getOrAddEntry('else');
     };
     Lexer.prototype.analyzeNumber = function () {
         var num = '';
@@ -153,6 +113,17 @@ var Lexer = (function () {
             return false;
         var letterNumber = /^[0-9a-zA-Z_]+$/;
         if (str.match(letterNumber)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    };
+    Lexer.prototype.isNumber = function (str) {
+        if (str === undefined)
+            return false;
+        var letter = /^[0-9]+$/;
+        if (str.match(letter)) {
             return true;
         }
         else {

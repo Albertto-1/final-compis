@@ -16,14 +16,19 @@ export class Entry {
         case Tag.ERROR:
           str = 'Error';
           break;
-        case Tag.STR:
-          str = 'String';
-          break;
         case Tag.NUM:
           str = 'Number';
           break;
+        case Tag.PRINT:
+          str = 'Print';
+          extra = '\t';
+          break;
         case Tag.ID:
           str = 'ID';
+          extra = '\t';
+          break;
+        case Tag.IF:
+          str = 'IF';
           extra = '\t';
           break;
         case Tag.EOF:
@@ -32,36 +37,14 @@ export class Entry {
         case Tag.ASIGN:
           str = 'Asigned to';
           break;
-        case Tag.EQ:
-          str = 'is equal';
-          break;
-        case Tag.LE:
-          str = 'is lower or equal';
-          break;
-        case Tag.GE:
-          str = 'is greater or equal';
-          break;
         case Tag.LT:
           str = 'is lower than';
-          break;
-        case Tag.GT:
-          str = 'is greater than';
           break;
         case Tag.LP:
           str = 'Left (';
           break;
         case Tag.RP:
           str = 'Right (';
-          break;
-        case Tag.OFTYPE:
-          str = 'Of type';
-          break;
-        case Tag.SEMICOLON:
-          str = 'Semicolon';
-          break;
-        case Tag.COMA:
-          str = 'Coma';
-          extra = '\t';
           break;
         case Tag.POINT:
           str = 'Point';
@@ -81,18 +64,17 @@ export class Entry {
         case Tag.DIVISION:
           str = 'Division';
           break;
+        case Tag.THEN:
+          str = 'Then';
+          extra = '\t';
+          break;
         case Tag.TYPE:
           str = 'Type';
           extra = '\t';
           break;
-        case Tag.AND:
-        case Tag.OR:
         case Tag.END:
         case Tag.TRUE:
         case Tag.FALSE:
-        case Tag.VAR:
-        case Tag.BEGIN:
-        case Tag.UNTIL:
           extra = '\t';
         default:
           str = this.value;

@@ -1,0 +1,18 @@
+int num1
+int num2
+bool b1
+bool b2
+int num3
+bool b3
+
+b1 = #t
+b2 = #f
+num1 = 10
+num2 = 1878
+if num1 < num2 then 
+	num3 = num1 * num2
+	if num2 < num3 then
+		print #then
+	end
+end
+print num3
