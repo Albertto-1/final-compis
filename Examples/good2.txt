@@ -1,0 +1,13 @@
+int aux
+int tmp
+bool b1
+
+b1 = #f
+tmp = 10
+aux = tmp
+if #t & b then
+tmp = 12 + 10 * aux
+end
+if b then
+aux = - (aux + 567)
+end

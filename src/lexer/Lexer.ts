@@ -24,7 +24,7 @@ export class Lexer {
 
   scan() {
     if (this.char === undefined) {
-      return this.symbolTable.getOrAddEntry('eof', Tag.EOF);
+      return this.symbolTable.getOrAddEntry('$');
     }
     while(
       this.char === ' ' || 
@@ -44,9 +44,6 @@ export class Lexer {
       return this.analyzeString();
     }
     switch (this.char) {
-      case '<':
-        this.next();
-        return this.symbolTable.getOrAddEntry('<');
       case '#':
         return this.analyzeBool();
       case '=':
@@ -56,6 +53,8 @@ export class Lexer {
       case '-':
       case '*':
       case '/':
+      case '&':
+      case '<':
         return this.analyzeSimbols();
     }
     this.next();
@@ -93,7 +92,7 @@ export class Lexer {
     if (this.symbolTable.isInTable(str)) {
       return this.symbolTable.getOrAddEntry(str);
     }
-    return this.symbolTable.getOrAddEntry(str, Tag.ID);
+    return this.symbolTable.getOrAddEntry(str, Tag.ID, 'id');
   }
 
   private analyzeNumber() {
@@ -104,7 +103,7 @@ export class Lexer {
       if (this.char === '.') hadPoint = true;
       this.next();
     } while(!isNaN(+this.char) || (this.char === '.' && !hadPoint));
-    return this.symbolTable.getOrAddEntry(num, Tag.NUM, +num);
+    return this.symbolTable.getOrAddEntry(num, Tag.NUM, 'integer');
   }
 
   private isLetter(str: string) {

@@ -8,22 +8,23 @@ export class SymbolTable {
   constructor() {
     this.addEntry('int', Tag.TYPE);
     this.addEntry('bool', Tag.TYPE);
-    this.addEntry('#t', Tag.TRUE);
-    this.addEntry('#f', Tag.FALSE);
-    this.addEntry('=', Tag.ASIGN);
-    this.addEntry('<', Tag.LT);
+    this.addEntry('#t', Tag.TRUE, 'boolean');
+    this.addEntry('#f', Tag.FALSE, 'boolean');
+    this.addEntry('=', Tag.ASIGN, 'assign');
+    this.addEntry('<', Tag.LT, 'operator');
+    this.addEntry('&', Tag.AND, 'operator');
     this.addEntry('if', Tag.IF);
     this.addEntry('end', Tag.END);
     this.addEntry('then', Tag.THEN);
     this.addEntry('print', Tag.PRINT);
-    this.addEntry('*', Tag.PRODUCT);
-    this.addEntry('.', Tag.POINT);
-    this.addEntry('+', Tag.PLUS);
-    this.addEntry('-', Tag.MINUS);
-    this.addEntry('*', Tag.PRODUCT);
-    this.addEntry('/', Tag.DIVISION);
-    this.addEntry('(', Tag.LP);
-    this.addEntry(')', Tag.RP);
+    this.addEntry('*', Tag.PRODUCT, 'operator');
+    this.addEntry('+', Tag.PLUS, 'operator');
+    this.addEntry('-', Tag.MINUS, 'minus');
+    this.addEntry('*', Tag.PRODUCT, 'operator');
+    this.addEntry('/', Tag.DIVISION, 'operator');
+    this.addEntry('(', Tag.LP, 'lp');
+    this.addEntry(')', Tag.RP, 'rp');
+    this.addEntry('$', Tag.EOF, '$');
   }
 
   isInTable(identifier: string) {

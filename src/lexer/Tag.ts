@@ -6,7 +6,6 @@ export class Tag {
   static THEN = 4;
   static END = 5;
   static PRODUCT = 6;
-  static POINT = 7;
   static PLUS = 8;
   static MINUS = 9;
   static DIVISION = 10;
@@ -19,4 +18,5 @@ export class Tag {
   static TRUE = 17;
   static FALSE = 18;
   static PRINT = 19;
+  static AND = 20;
 }
